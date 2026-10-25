@@ -17,7 +17,7 @@ const WeatherAlert = require('../models/WeatherAlert');
 const { generateCropTimeline } = require('./cropTimelineGenerator');
 const { analyzeSoilMetrics } = require('../controllers/soilController');
 
-const seedData = async () => {
+const seedData = async (exitOnComplete = false) => {
   try {
     await connectDB();
 
@@ -398,11 +398,20 @@ const seedData = async () => {
     console.log('Admin:   admin@agritech.com   |  Admin@123');
     console.log('-----------------------------\n');
 
-    process.exit(0);
+    if (exitOnComplete) {
+      process.exit(0);
+    }
   } catch (error) {
     console.error('❌ Seeding Error:', error);
-    process.exit(1);
+    if (exitOnComplete) {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
-seedData();
+if (require.main === module) {
+  seedData(true);
+}
+
+module.exports = { seedData };
