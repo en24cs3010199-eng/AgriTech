@@ -1,0 +1,26 @@
+{
+  "name": "agritech-root",
+  "version": "1.0.0",
+  "description": "AgriTech — Empowering Farmers Through Digital Technology (SkillWallet MERN Program)",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "seed": "npm --prefix backend run seed",
+    "test": "npm --prefix backend test",
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix backend start",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
+  "keywords": [
+    "agritech",
+    "mern",
+    "react",
+    "nodejs",
+    "express",
+    "mongodb",
+    "agriculture",
+    "crop-recommendation"
+  ],
+  "author": "SkillWallet Full Stack Developer",
+  "license": "ISC"
+}
