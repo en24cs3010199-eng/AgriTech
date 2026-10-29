@@ -20,55 +20,58 @@
 
 ## 🏛 Architecture & System Design
 
-```mermaid
-graph TB
-    subgraph Client ["Frontend (React.js + Bootstrap 5)"]
-        UI[Farmer & Admin Responsive UI]
-        Lang[Language Context (English / हिन्दी)]
-        AuthCtx[Auth Context & JWT Interceptor]
-        Router[React Router v6]
+flowchart TD
+    subgraph CLIENT["Frontend - React and Bootstrap"]
+        UI["Farmer and Admin UI"]
+        LANG["Language Context"]
+        AUTH["Authentication Context"]
+        ROUTER["React Router"]
+        UI --> ROUTER --> AUTH --> LANG
     end
 
-    subgraph Server ["Backend (Node.js + Express.js)"]
-        API[Express REST API Gateway]
-        AuthMW[JWT Auth & RBAC Middleware]
-        ValMW[Input Validation & Sanitization]
-        
-        subgraph Controllers ["Controllers & Services"]
-            AuthController[Auth & Profile Management]
-            FarmController[Farm & Crop Records]
-            SoilController[Soil Diagnostics & NPK Plans]
-            WeatherService[Open-Meteo Agro Weather & Pest Risk]
-            MarketController[Resource Catalogue & Orders]
-            ForumController[Community & Agronomist Consultations]
-            AdminController[Admin CMS & User Control Center]
-            MLEngine[Explainable ML Recommendation Engine]
-            KisanAI[Hindi Kisan Grounded Assistant]
-        end
+    subgraph SERVER["Backend - Node.js and Express"]
+        API["REST API Gateway"]
+        JWT["JWT Authentication and RBAC"]
+        VALIDATE["Input Validation"]
+        AUTHCTRL["Authentication and Profile"]
+        FARM["Farm and Crop Management"]
+        SOIL["Soil Diagnostics"]
+        WEATHER["Weather and Pest Risk"]
+        MARKET["Resources and Orders"]
+        FORUM["Community and Consultations"]
+        ADMIN["Admin Controls"]
+        ML["ML Recommendation Engine"]
+        AI["Hindi Kisan AI Assistant"]
+
+        API --> JWT --> VALIDATE
+        VALIDATE --> AUTHCTRL
+        VALIDATE --> FARM
+        VALIDATE --> SOIL
+        VALIDATE --> WEATHER
+        VALIDATE --> MARKET
+        VALIDATE --> FORUM
+        VALIDATE --> ADMIN
+        VALIDATE --> ML
+        VALIDATE --> AI
     end
 
-    subgraph DataLayer ["Data & External Services"]
-        MongoDB[(MongoDB Database / Atlas M0)]
-        WeatherAPI[(Open-Meteo Free Agro-API)]
-        MLDataset[(Kaggle Crop Dataset / Scikit-Learn Model)]
-        KnowledgeBase[(ICAR / Kisan Grounded Agri KB)]
+    subgraph DATA["Database and External Services"]
+        DB[("MongoDB Atlas")]
+        WEATHERAPI["Open-Meteo API"]
+        DATASET["Crop Dataset and ML Model"]
+        KB["Agriculture Knowledge Base"]
     end
 
-    UI --> Router
-    Router --> AuthCtx
-    AuthCtx --> API
-    API --> AuthMW
-    AuthMW --> ValMW
-    ValMW --> Controllers
-    FarmController --> MongoDB
-    SoilController --> MongoDB
-    MarketController --> MongoDB
-    ForumController --> MongoDB
-    AdminController --> MongoDB
-    WeatherService --> WeatherAPI
-    MLEngine --> MLDataset
-    KisanAI --> KnowledgeBase
-```
+    AUTH --> API
+    AUTHCTRL --> DB
+    FARM --> DB
+    SOIL --> DB
+    MARKET --> DB
+    FORUM --> DB
+    ADMIN --> DB
+    WEATHER --> WEATHERAPI
+    ML --> DATASET
+    AI --> KB
 
 ---
 
