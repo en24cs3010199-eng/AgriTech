@@ -20,6 +20,7 @@
 
 ## 🏛 Architecture & System Design
 
+```mermaid
 flowchart TD
     subgraph CLIENT["Frontend - React and Bootstrap"]
         UI["Farmer and Admin UI"]
@@ -72,7 +73,7 @@ flowchart TD
     WEATHER --> WEATHERAPI
     ML --> DATASET
     AI --> KB
-
+```
 ---
 
 ## 💻 Mandatory Technology Stack
