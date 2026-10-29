@@ -7,6 +7,7 @@ const fs = require('fs');
 
 // Load environment variables
 dotenv.config();
+require('./config/validateEnv'); // Abort if env vars missing
 
 const { connectDB } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
@@ -28,7 +29,7 @@ const app = express();
 
 // Middlewares
 app.use(cors({
-  origin: '*',
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true
 }));
 app.use(express.json());

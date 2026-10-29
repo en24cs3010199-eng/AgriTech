@@ -20,9 +20,12 @@ const protect = async (req, res, next) => {
   }
 
   try {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET || 'agritech_jwt_super_secure_secret_key_2026_skillwallet'
+      process.env.JWT_SECRET
     );
 
     const user = await User.findById(decoded.id).select('-password');

@@ -3,9 +3,12 @@ const User = require('../models/User');
 
 // Helper to generate JWT token
 const generateToken = (id) => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
   return jwt.sign(
     { id },
-    process.env.JWT_SECRET || 'agritech_jwt_super_secure_secret_key_2026_skillwallet',
+    process.env.JWT_SECRET,
     {
       expiresIn: process.env.JWT_EXPIRES_IN || '7d'
     }
@@ -17,7 +20,9 @@ const generateToken = (id) => {
 // @access  Public
 const register = async (req, res, next) => {
   try {
-    const { name, email, password, phone, role, preferredLanguage, location, bio } = req.body;
+    const { name, email, password, phone, preferredLanguage, location, bio } = req.body;
+  // Force role to farmer for all public registrations
+  const role = 'farmer';
 
     const userExists = await User.findOne({ email });
     if (userExists) {
