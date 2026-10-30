@@ -31,12 +31,33 @@ const getWeatherForecast = async (req, res, next) => {
       validUntil: { $gte: new Date() }
     }).sort({ createdAt: -1 });
 
+    // Include cache metadata so clients can show a "last updated" notice.
+    // Stale data is still served with HTTP 200 — the stale flag in the body
+    // communicates the data freshness without breaking clients that expect 200.
     res.status(200).json({
       success: true,
       ...weatherData,
+      stale: weatherData.stale === true,
+      lastUpdated: weatherData.lastUpdated,
       regionalAlerts: dbAlerts
     });
   } catch (error) {
+    // If no cached data exists and upstream failed, return 503 (not 500)
+    // so the frontend can show a user-friendly message instead of a generic error
+    const isWeatherUnavailable =
+      error.message && (
+        error.message.includes('temporarily unavailable') ||
+        error.message.includes('Unable to fetch real-time weather data')
+      );
+
+    if (isWeatherUnavailable) {
+      return res.status(503).json({
+        success: false,
+        message: error.message,
+        retryAfterMinutes: 2
+      });
+    }
+
     next(error);
   }
 };
