@@ -58,7 +58,14 @@ const connectDB = async () => {
     } catch (error) {
       console.error(`❌ MongoDB Connection Error: ${error.message}`);
       connectingPromise = null;
-      // Attempt in‑memory fallback if not already instantiated
+
+      // In production, never silently fall back to in-memory storage.
+      // A failed Atlas connection is a fatal startup error – surface it immediately.
+      if (process.env.NODE_ENV === 'production') {
+        throw error;
+      }
+
+      // Development / test only: attempt in‑memory MongoDB fallback
       if (!mongod) {
         try {
           console.log('⚠️ Attempting fallback to in‑memory MongoDB...');
